@@ -107,11 +107,11 @@ function checkTie() {
 }
 
 function renderBoard() {
-  if (winner === "T") return fillWithCats();
   board.forEach(function (val, idx) {
+    const newVal = winner ? winner : val;
     const el = document.getElementById(`${idx}`);
-    el.style.backgroundColor = PLAYERS[val].color;
-    el.innerText = `${PLAYERS[val].icon}`;
+    el.style.backgroundColor = PLAYERS[newVal].color;
+    el.innerText = `${PLAYERS[newVal].icon}`;
   });
 }
 
@@ -127,12 +127,4 @@ function renderMessage() {
   } else {
     msgEl.innerHTML = `<span style="color:${PLAYERS[turn].color};">${PLAYERS[turn].icon}'s</span> TURN!`;
   }
-}
-
-function fillWithCats() {
-  board.forEach(function (val, idx) {
-    const el = document.getElementById(`${idx}`);
-    el.style.backgroundColor = PLAYERS[winner].color;
-    el.innerText = `${PLAYERS[winner].icon}`;
-  });
 }
