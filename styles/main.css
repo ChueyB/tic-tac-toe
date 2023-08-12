@@ -47,6 +47,20 @@ h1 {
   align-items: center;
 }
 
+#scores {
+  margin: 0 auto;
+  display: grid;
+  grid-template: repeat(1, 12vmin) / repeat(3, 20vmin);
+}
+
+#scores > h3 {
+  margin-top: 7.5vmin;
+  font-size: 4vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 button {
   margin-top: 4vmin;
   padding: 2vmin;

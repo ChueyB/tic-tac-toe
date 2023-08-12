@@ -39,6 +39,7 @@ let score;
 const msgEl = document.querySelector("h1");
 const resetBtn = document.querySelector("button");
 const cellEls = [...document.querySelectorAll("#board > div")];
+const scoreEls = [...document.querySelectorAll("#scores > h3")];
 
 /*----- event listeners -----*/
 resetBtn.addEventListener("click", init);
@@ -49,11 +50,24 @@ init();
 
 function init() {
   board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  score = [0, 0];
   turn = 1;
   winner = 0;
 
+  score = scoreHandler();
   render();
+}
+
+function scoreHandler() {
+  return score ? scoreIncrease(winner) : [0, 0];
+}
+
+function scoreIncrease(winningPlayer) {
+  if (winningPlayer === 1) {
+    score[0]++;
+  } else if (winningPlayer === -1) {
+    score[1]++;
+  }
+  return score;
 }
 
 function cellClickHandler(e) {
@@ -61,11 +75,10 @@ function cellClickHandler(e) {
   const elIdx = cellEls.indexOf(e.target);
   if (elIdx === -1) return;
   board[elIdx] = turn;
-
   turn *= -1;
-
   winner = getWinner();
 
+  score = scoreHandler();
   render();
 }
 
@@ -73,6 +86,7 @@ function render() {
   renderBoard();
   renderMessage();
   renderControls();
+  renderScores();
 }
 
 function getWinner() {
@@ -116,4 +130,12 @@ function renderMessage() {
   } else {
     msgEl.innerHTML = `<span style="color:${LOOKUP[turn].color};">${LOOKUP[turn].icon}'s</span> TURN!`;
   }
+}
+
+function renderScores() {
+  scoreEls.forEach(function (el, elIdx) {
+    el.innerHTML = `<span style="color:${LOOKUP[el.id].color};">${
+      score[elIdx]
+    }</span>`;
+  });
 }
