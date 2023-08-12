@@ -12,6 +12,10 @@ const PLAYERS = {
     icon: "?",
     color: "#969696",
   },
+  T: {
+    icon: "🐱",
+    color: "Orange",
+  },
 };
 
 const WINNING_COMBOS = [
@@ -37,7 +41,6 @@ const cellEls = [...document.querySelectorAll("#board > div")];
 
 /*----- event listeners -----*/
 resetBtn.addEventListener("click", init);
-document.getElementById("board").addEventListener("click", cellClickHandler);
 
 /*----- functions -----*/
 init();
@@ -47,6 +50,7 @@ function init() {
   turn = 1;
   winner = 0;
 
+  clickToggle();
   render();
 }
 
@@ -60,7 +64,20 @@ function cellClickHandler(e) {
 
   winner = getWinner();
 
+  clickToggle();
   render();
+}
+
+function clickToggle() {
+  if (winner) {
+    document
+      .getElementById("board")
+      .removeEventListener("click", cellClickHandler);
+  } else {
+    document
+      .getElementById("board")
+      .addEventListener("click", cellClickHandler);
+  }
 }
 
 function render() {
@@ -90,6 +107,7 @@ function checkTie() {
 }
 
 function renderBoard() {
+  if (winner === "T") return fillWithCats();
   board.forEach(function (val, idx) {
     const el = document.getElementById(`${idx}`);
     el.style.backgroundColor = PLAYERS[val].color;
@@ -103,10 +121,18 @@ function renderControls() {
 
 function renderMessage() {
   if (winner === "T") {
-    msgEl.innerHTML = "CATS GAME!";
+    msgEl.innerHTML = `<span style="color:${PLAYERS[winner].color};">CATS GAME</span>`;
   } else if (winner) {
     msgEl.innerHTML = `<span style="color:${PLAYERS[winner].color};">${PLAYERS[winner].icon}</span> WINS!`;
   } else {
     msgEl.innerHTML = `<span style="color:${PLAYERS[turn].color};">${PLAYERS[turn].icon}'s</span> TURN!`;
   }
+}
+
+function fillWithCats() {
+  board.forEach(function (val, idx) {
+    const el = document.getElementById(`${idx}`);
+    el.style.backgroundColor = PLAYERS[winner].color;
+    el.innerText = `${PLAYERS[winner].icon}`;
+  });
 }

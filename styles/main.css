@@ -32,7 +32,6 @@ h1 {
   color: #333;
   border: 6px solid #333;
   border-radius: 10px;
-
   display: grid;
   grid-template: repeat(3, 20vmin) / repeat(3, 20vmin);
 }
@@ -52,9 +51,10 @@ button {
   margin-top: 4vmin;
   padding: 2vmin;
   font-size: 2vmin;
-  border-radius: 4vmin;
-  border: 0.1vmin solid grey;
-  color: grey;
+  border-radius: 2vmin;
+  border: 0.1vmin solid #333;
+  background-color: #5b9a8b;
+  color: #333;
 }
 
 button:hover {
