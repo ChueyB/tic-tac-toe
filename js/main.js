@@ -1,5 +1,5 @@
 /*----- constants -----*/
-const PLAYERS = {
+const LOOKUP = {
   1: {
     icon: "X",
     color: "#6F61C0",
@@ -33,6 +33,7 @@ const WINNING_COMBOS = [
 let board;
 let turn;
 let winner;
+let score;
 
 /*----- cached elements  -----*/
 const msgEl = document.querySelector("h1");
@@ -41,16 +42,17 @@ const cellEls = [...document.querySelectorAll("#board > div")];
 
 /*----- event listeners -----*/
 resetBtn.addEventListener("click", init);
+document.getElementById("board").addEventListener("click", cellClickHandler);
 
 /*----- functions -----*/
 init();
 
 function init() {
   board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  score = [0, 0];
   turn = 1;
   winner = 0;
 
-  clickToggle();
   render();
 }
 
@@ -64,20 +66,7 @@ function cellClickHandler(e) {
 
   winner = getWinner();
 
-  clickToggle();
   render();
-}
-
-function clickToggle() {
-  if (winner) {
-    document
-      .getElementById("board")
-      .removeEventListener("click", cellClickHandler);
-  } else {
-    document
-      .getElementById("board")
-      .addEventListener("click", cellClickHandler);
-  }
 }
 
 function render() {
@@ -110,8 +99,8 @@ function renderBoard() {
   board.forEach(function (val, idx) {
     const newVal = winner ? winner : val;
     const el = document.getElementById(`${idx}`);
-    el.style.backgroundColor = PLAYERS[newVal].color;
-    el.innerText = `${PLAYERS[newVal].icon}`;
+    el.style.backgroundColor = LOOKUP[newVal].color;
+    el.innerText = `${LOOKUP[newVal].icon}`;
   });
 }
 
@@ -121,10 +110,10 @@ function renderControls() {
 
 function renderMessage() {
   if (winner === "T") {
-    msgEl.innerHTML = `<span style="color:${PLAYERS[winner].color};">CATS GAME</span>`;
+    msgEl.innerHTML = `<span style="color:${LOOKUP[winner].color};">CATS GAME</span>`;
   } else if (winner) {
-    msgEl.innerHTML = `<span style="color:${PLAYERS[winner].color};">${PLAYERS[winner].icon}</span> WINS!`;
+    msgEl.innerHTML = `<span style="color:${LOOKUP[winner].color};">${LOOKUP[winner].icon}</span> WINS!`;
   } else {
-    msgEl.innerHTML = `<span style="color:${PLAYERS[turn].color};">${PLAYERS[turn].icon}'s</span> TURN!`;
+    msgEl.innerHTML = `<span style="color:${LOOKUP[turn].color};">${LOOKUP[turn].icon}'s</span> TURN!`;
   }
 }
