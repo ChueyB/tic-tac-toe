@@ -89,6 +89,7 @@ function cellClickHandler(e) {
   board[elIdx] = turn;
   turn *= -1;
   if (gameType === "computer") computerHandler(e);
+  checkCheckmate();
   winner = getWinner();
 
   score = scoreHandler();
@@ -108,8 +109,20 @@ function computerHandler(e) {
   });
   const randomIndex =
     freeIndexes[Math.floor(Math.random() * freeIndexes.length)];
-  board[randomIndex] = turn;
+  board[checkCheckmate() || randomIndex] = turn;
   turn *= -1;
+}
+
+function checkCheckmate() {
+  for (let combo of WINNING_COMBOS) {
+    const boardCombo = [board[combo[0]], board[combo[1]], board[combo[2]]];
+    const total = board[combo[0]] + board[combo[1]] + board[combo[2]];
+    const absTotal = Math.abs(total);
+
+    if (absTotal === 2) {
+      return combo[boardCombo.indexOf(0)];
+    }
+  }
 }
 
 function render() {
