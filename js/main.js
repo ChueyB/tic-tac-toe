@@ -88,10 +88,8 @@ function cellClickHandler(e) {
   if (elIdx === -1) return;
   board[elIdx] = turn;
   turn *= -1;
-  if (gameType === "computer") computerHandler(e);
-  checkCheckmate();
   winner = getWinner();
-
+  if (gameType === "computer" && !winner) computerHandler(e);
   score = scoreHandler();
   render();
 }
@@ -102,7 +100,7 @@ function gameTypeClickHandler(e) {
   render();
 }
 
-function computerHandler(e) {
+function computerHandler() {
   const freeIndexes = [];
   board.forEach(function (val, idx) {
     if (val === 0) freeIndexes.push(idx);
@@ -111,6 +109,7 @@ function computerHandler(e) {
     freeIndexes[Math.floor(Math.random() * freeIndexes.length)];
   board[checkCheckmate() || randomIndex] = turn;
   turn *= -1;
+  winner = getWinner();
 }
 
 function checkCheckmate() {
