@@ -41,7 +41,21 @@ h1 {
   border-radius: 2px;
   font-family: Helvetica;
   font-weight: bold;
-  font-size: 4em;
+  font-size: 4vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#score-header {
+  margin: -2vmin auto;
+  display: grid;
+  grid-template: repeat(1, 12vmin) / repeat(3, 20vmin);
+}
+
+#score-header > h2 {
+  margin-top: 1.5vmin;
+  font-size: 4vmin;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,17 +75,32 @@ h1 {
   align-items: center;
 }
 
-button {
+#gameTypeButtons > button {
+  margin-bottom: 2vmin;
+  padding: 1vmin;
+  font-size: 2vmin;
+  border-radius: 1vmin;
+  border: 0.1vmin solid #333;
+  background-color: #5b9a8b;
+  color: #333;
+}
+
+#gameTypeButtons > button:hover {
+  color: white;
+  background-color: darkgrey;
+}
+
+button#resetBtn {
   margin-top: 4vmin;
   padding: 2vmin;
-  font-size: 2vmin;
+  font-size: 3vmin;
   border-radius: 2vmin;
   border: 0.1vmin solid #333;
   background-color: #5b9a8b;
   color: #333;
 }
 
-button:hover {
+button#resetBtn:hover {
   color: white;
   background-color: darkgrey;
 }

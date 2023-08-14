@@ -34,16 +34,23 @@ let board;
 let turn;
 let winner;
 let score;
+let gameType;
 
 /*----- cached elements  -----*/
 const msgEl = document.querySelector("h1");
-const resetBtn = document.querySelector("button");
+const resetBtn = document.querySelector("button#resetBtn");
 const cellEls = [...document.querySelectorAll("#board > div")];
 const scoreEls = [...document.querySelectorAll("#scores > h3")];
+const [local, computer] = [
+  ...document.querySelectorAll("#gameTypeButtons > button"),
+];
 
 /*----- event listeners -----*/
 resetBtn.addEventListener("click", init);
 document.getElementById("board").addEventListener("click", cellClickHandler);
+document
+  .getElementById("gameTypeButtons")
+  .addEventListener("click", gameTypeClickHandler);
 
 /*----- functions -----*/
 init();
@@ -52,7 +59,7 @@ function init() {
   board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   turn = 1;
   winner = 0;
-
+  gameType = null;
   score = scoreHandler();
   render();
 }
@@ -71,15 +78,38 @@ function scoreIncrease(winningPlayer) {
 }
 
 function cellClickHandler(e) {
-  if (e.target.innerText !== "?") return;
+  if (
+    e.target.innerText !== "?" ||
+    gameType === null ||
+    (gameType === "computer" && turn === -1)
+  )
+    return;
   const elIdx = cellEls.indexOf(e.target);
   if (elIdx === -1) return;
   board[elIdx] = turn;
   turn *= -1;
+  if (gameType === "computer") computerHandler(e);
   winner = getWinner();
 
   score = scoreHandler();
   render();
+}
+
+function gameTypeClickHandler(e) {
+  if (e.target.id === "gameTypeButtons") return;
+  gameType = e.target.id;
+  render();
+}
+
+function computerHandler(e) {
+  const freeIndexes = [];
+  board.forEach(function (val, idx) {
+    if (val === 0) freeIndexes.push(idx);
+  });
+  const randomIndex =
+    freeIndexes[Math.floor(Math.random() * freeIndexes.length)];
+  board[randomIndex] = turn;
+  turn *= -1;
 }
 
 function render() {
@@ -114,12 +144,14 @@ function renderBoard() {
     const newVal = winner ? winner : val;
     const el = document.getElementById(`${idx}`);
     el.style.backgroundColor = LOOKUP[newVal].color;
-    el.innerText = `${LOOKUP[newVal].icon}`;
+    el.innerText = gameType === null ? "" : `${LOOKUP[newVal].icon}`;
   });
 }
 
 function renderControls() {
   resetBtn.style.visibility = winner ? "visible" : "hidden";
+  local.style.visibility = gameType ? "hidden" : "visible";
+  computer.style.visibility = gameType ? "hidden" : "visible";
 }
 
 function renderMessage() {
@@ -127,6 +159,8 @@ function renderMessage() {
     msgEl.innerHTML = `<span style="color:${LOOKUP[winner].color};">CATS GAME</span>`;
   } else if (winner) {
     msgEl.innerHTML = `<span style="color:${LOOKUP[winner].color};">${LOOKUP[winner].icon}</span> WINS!`;
+  } else if (!gameType) {
+    msgEl.innerHTML = `<span style="color:${LOOKUP[turn].color};">Choose a Mode!</span>`;
   } else {
     msgEl.innerHTML = `<span style="color:${LOOKUP[turn].color};">${LOOKUP[turn].icon}'s</span> TURN!`;
   }
