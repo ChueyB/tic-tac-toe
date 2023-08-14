@@ -107,6 +107,8 @@ function computerHandler() {
   });
   const randomIndex =
     freeIndexes[Math.floor(Math.random() * freeIndexes.length)];
+  if (checkCheckmate() || checkCheckmate() === 0) {
+  }
   board[checkCheckmate() || randomIndex] = turn;
   turn *= -1;
   winner = getWinner();
@@ -119,7 +121,7 @@ function checkCheckmate() {
     const absTotal = Math.abs(total);
 
     if (absTotal === 2) {
-      return combo[boardCombo.indexOf(0)];
+      return `${combo[boardCombo.indexOf(0)]}`;
     }
   }
 }
